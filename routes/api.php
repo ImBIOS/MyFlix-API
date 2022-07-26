@@ -23,6 +23,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('user', [UserController::class, 'fetch']);
+        Route::post('user', [UserController::class, 'updateProfile']);
+        Route::post('user/photo', [UserController::class, 'updatePhoto']);
+        Route::post('logout', [UserController::class, 'logout']);
+    });
+});
+
+Route::prefix('v1')->group(function () {
     Route::prefix('user')->group(function () {
         Route::post('login', [UserController::class, 'login']);
         Route::post('register', [UserController::class, 'register']);
