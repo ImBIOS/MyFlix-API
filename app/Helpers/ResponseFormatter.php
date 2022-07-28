@@ -13,7 +13,7 @@ class ResponseFormatter
      * @var array
      */
     protected static $response = [
-        'code' => 200,
+        'code' => 201,
         'success' => true,
         'message' => null,
         'data' => null,

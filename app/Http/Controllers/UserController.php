@@ -123,7 +123,7 @@ class UserController extends Controller
         $user = Auth::user();
         $user->update($data);
 
-        return ResponseFormatter::success($user, 'Profile Updated');
+        return ResponseFormatter::success(['user' => $user], 'Profile Updated');
     }
 
     /**
