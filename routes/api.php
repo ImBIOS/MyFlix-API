@@ -28,6 +28,7 @@ Route::prefix('v1')->group(function () {
 
         Route::post('watchlist', [MovieController::class, 'addWatchlist']);
         Route::get('watchlist', [MovieController::class, 'getWatchlist']);
+        Route::delete('watchlist', [MovieController::class, 'removeWatchlist']);
 
         Route::get('sync', [SyncController::class, 'index']);
         Route::post('logout', [UserController::class, 'logout']);
@@ -41,5 +42,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::get('movie/{movieId}', [MovieController::class, 'index']);
+    Route::get('movies', [MovieController::class, 'getByGenre']);
+
     Route::get('homepage', [HomeController::class, 'index']);
 });
