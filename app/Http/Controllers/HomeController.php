@@ -17,7 +17,7 @@ class HomeController extends Controller
         $pickedKey = array_rand($dummyMovieIds);
 
         $response = Http::post('https://mtflix-tmdb.vercel.app/api/imamdev', [
-            'url' => 'https://api.themoviedb.org/3/movie/' . $dummyMovieIds[array_rand($pickedKey)] . '?imamdev&append_to_response=credits',
+            'url' => 'https://api.themoviedb.org/3/movie/' . $dummyMovieIds[$pickedKey] . '?imamdev&append_to_response=credits',
         ])->json()['data'];
 
 
