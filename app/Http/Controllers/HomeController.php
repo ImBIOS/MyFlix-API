@@ -35,7 +35,7 @@ class HomeController extends Controller
 
         return ResponseFormatter::success([
             'header' => $headerData,
-            'section' => array([
+            'sections' => array([
                 'section_name' => "Sedang Trend Sekarang",
                 'contents' => array($headerData, $headerData, $headerData),
             ], [
