@@ -39,7 +39,7 @@ class UserController extends Controller
             if (!Auth::attempt($credentials)) {
                 return ResponseFormatter::error([
                     'message' => 'Unauthorized'
-                ], 'Authentication Failed', 500);
+                ], 'Authentication Failed', 401);
             }
 
             $user = User::where('email', $request->email)->first();
@@ -57,7 +57,7 @@ class UserController extends Controller
             return ResponseFormatter::error([
                 'message' => 'Something went wrong',
                 'error' => $error,
-            ], 'Authentication Failed', 500);
+            ], 'Authentication Failed', 401);
         }
     }
 
@@ -96,7 +96,7 @@ class UserController extends Controller
             return ResponseFormatter::error([
                 'message' => 'Something went wrong',
                 'error' => $error,
-            ], 'Authentication Failed', 500);
+            ], 'Registration Failed', 400);
         }
     }
 
