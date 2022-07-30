@@ -11,13 +11,15 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $response = Http::post('https://mtflix-tmdb.vercel.app/api/imamdev', [
-            'url' => 'https://api.themoviedb.org/3/movie/445030?imamdev&append_to_response=credits',
-        ])->json()['data'];
-
+        $dummyMovieIds = array("413594", "445030");
         $dummyMovies = array("sao.mp4", "ngnl.mp4");
         $dummyTrailers = array("sao-trailer.mp4", "ngnl-trailer.mp4");
-        $pickedKey = array_rand($dummyMovies);
+        $pickedKey = array_rand($dummyMovieIds);
+
+        $response = Http::post('https://mtflix-tmdb.vercel.app/api/imamdev', [
+            'url' => 'https://api.themoviedb.org/3/movie/' . $dummyMovieIds[array_rand($pickedKey)] . '?imamdev&append_to_response=credits',
+        ])->json()['data'];
+
 
         $headerData = [
             'id' => $response['id'],
