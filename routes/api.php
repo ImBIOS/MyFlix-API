@@ -26,6 +26,9 @@ Route::prefix('v1')->group(function () {
             Route::post('photo', [UserController::class, 'updatePhoto']);
         });
 
+        Route::post('watchlist', [MovieController::class, 'addWatchlist']);
+        Route::get('watchlist', [MovieController::class, 'getWatchlist']);
+
         Route::get('sync', [SyncController::class, 'index']);
         Route::post('logout', [UserController::class, 'logout']);
     });

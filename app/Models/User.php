@@ -43,4 +43,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the watchlist associated with the user.
+     */
+    public function watchlist()
+    {
+        return $this->hasMany(Watchlist::class);
+    }
 }
