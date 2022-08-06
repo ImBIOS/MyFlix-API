@@ -57,7 +57,16 @@ class MovieController extends Controller
      */
     public function addWatchlist(Request $request)
     {
-        $movieId = $request->movie_id;
+        // Check if json or not
+        if (count($request->json()->all()) > 0) {
+            $request = $request->json()->all();
+        } else {
+            return ResponseFormatter::error([
+                'message' => 'Invalid request'
+            ], 'Invalid request', 400);
+        }
+
+        $movieId = $request['movie_id'];
 
         // Check if user already added this movie to watchlist
         $watchlist = Watchlist::where('user_id', Auth::id())

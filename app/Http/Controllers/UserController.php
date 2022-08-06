@@ -30,10 +30,23 @@ class UserController extends Controller
     public function login(Request $request)
     {
         try {
-            $request->validate([
+            // Check if json or not
+            if (count($request->json()->all()) > 0) {
+                $request = $request->json()->all();
+            } else {
+                return ResponseFormatter::error([
+                    'message' => 'Invalid request'
+                ], 'Invalid request', 400);
+            }
+
+            $validator = Validator::make($request, [
                 'email' => 'email|required',
                 'password' => 'required'
             ]);
+
+            if ($validator->fails()) {
+                return ResponseFormatter::error($validator->errors(), 'Validation failed', 400);
+            }
 
             $credentials = request(['email', 'password']);
             if (!Auth::attempt($credentials)) {
@@ -42,8 +55,8 @@ class UserController extends Controller
                 ], 'Authentication Failed', 401);
             }
 
-            $user = User::where('email', $request->email)->first();
-            if (!Hash::check($request->password, $user->password, [])) {
+            $user = User::where('email', $request['email'])->first();
+            if (!Hash::check($request['password'], $user->password, [])) {
                 throw new \InvalidArgumentException('Invalid Credentials');
             }
 
@@ -69,21 +82,35 @@ class UserController extends Controller
     public function register(Request $request)
     {
         try {
-            $request->validate([
+            // Check if json or not
+            if (count($request->json()->all()) > 0) {
+                $request = $request->json()->all();
+            } else {
+                return ResponseFormatter::error([
+                    'message' => 'Invalid request'
+                ], 'Invalid request', 400);
+            }
+
+
+            $validator = Validator::make($request, [
                 'username' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'password' => ['required', 'string', 'min:8'],
             ]);
 
+            if ($validator->fails()) {
+                return ResponseFormatter::error($validator->errors(), 'Validation Failed', 422);
+            }
+
             User::create([
-                'username' => $request->username,
-                'email' => $request->email,
-                'birthdate' => $request->birthdate,
-                'gender' => $request->gender,
-                'password' => Hash::make($request->password),
+                'username' => $request['username'],
+                'email' => $request['email'],
+                'birthdate' => $request['birthdate'],
+                'gender' => $request['gender'],
+                'password' => Hash::make($request['password']),
             ]);
 
-            $user = User::where('email', $request->email)->first();
+            $user = User::where('email', $request['email'])->first();
 
             $tokenResult = $user->createToken('token')->plainTextToken;
 
@@ -118,12 +145,28 @@ class UserController extends Controller
      */
     public function updateProfile(Request $request)
     {
-        $data = $request->all();
+        try {
+            // Check if json or not
+            if (count($request->json()->all()) > 0) {
+                $request = $request->json()->all();
+            } else {
+                return ResponseFormatter::error([
+                    'message' => 'Invalid request'
+                ], 'Invalid request', 400);
+            }
 
-        $user = Auth::user();
-        $user->update($data);
+            $data = $request;
 
-        return ResponseFormatter::success(['user' => $user], 'Profile Updated');
+            $user = Auth::user();
+            $user->update($data);
+
+            return ResponseFormatter::success(['user' => $user], 'Profile Updated');
+        } catch (Exception $error) {
+            return ResponseFormatter::error([
+                'message' => 'Something went wrong',
+                'error' => $error,
+            ], 'Profile Update Failed', 400);
+        }
     }
 
     /**
