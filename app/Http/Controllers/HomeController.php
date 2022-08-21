@@ -16,8 +16,13 @@ class HomeController extends Controller
         $dummyTrailers = array("sao-trailer.mp4", "ngnl-trailer.mp4");
         $pickedKey = array_rand($dummyMovieIds);
 
+        $randomMovieId = Http::post('https://mtflix-tmdb.vercel.app/api/imamdev', [
+            'url' => 'https://api.themoviedb.org/3/discover/movie?imamdev&include_adult=false&language=en-US&sort_by=popularity.desc&page=' . rand(1, 100),
+        ])->json()['data'];
+        $randomMovieId = $randomMovieId['results'][rand(0, count($randomMovieId['results']) - 1)]['id'];
+
         $response = Http::post('https://mtflix-tmdb.vercel.app/api/imamdev', [
-            'url' => 'https://api.themoviedb.org/3/movie/' . $dummyMovieIds[$pickedKey] . '?imamdev&append_to_response=credits',
+            'url' => 'https://api.themoviedb.org/3/movie/' . $randomMovieId . '?imamdev&append_to_response=credits',
         ])->json()['data'];
 
 
