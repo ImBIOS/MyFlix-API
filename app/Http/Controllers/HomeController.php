@@ -85,11 +85,11 @@ class HomeController extends Controller
             'sections' => array([
                 'section_name' => "Animation",
                 'section_id' => 16,
-                'contents' => $sectionOne,
+                'contents' => array_slice($sectionOne, 0, 8),
             ], [
                 'section_name' => "Action",
                 'section_id' => 28,
-                'contents' => $sectionTwo,
+                'contents' => array_slice($sectionTwo, 0, 8),
             ]),
         ], 'Home data fetched successfully');;
     }
