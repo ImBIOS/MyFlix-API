@@ -18,7 +18,18 @@ class MovieController extends Controller
      */
     public function index(Request $request)
     {
-        $movieId = $request->route('movieId');
+        $movieId = (int)$request->route('movieId');
+        $isUserWatchlist = false;
+
+        // Check if user already added this movie to watchlist
+        $watchlist = Watchlist::where('user_id', Auth::id())
+            ->where('movie_id', $movieId)
+            ->first();
+
+
+        if ($watchlist) {
+            $isUserWatchlist = true;
+        }
 
         $dummyMovieIds = array("413594", "445030");
         $dummyMovies = array("sao.mp4", "ngnl.mp4");
@@ -28,7 +39,6 @@ class MovieController extends Controller
         $response = Http::post('https://mtflix-tmdb.vercel.app/api/imamdev', [
             'url' => 'https://api.themoviedb.org/3/movie/' . $movieId . '?imamdev&append_to_response=credits',
         ])->json()['data'];
-
 
         $data = [
             'id' => $response['id'],
@@ -43,6 +53,7 @@ class MovieController extends Controller
             "video_url" => "http://75.101.213.57/movies/" . $dummyMovies[$pickedKey],
             "category" => array_column($response['genres'], 'name'),
             "cast" => array_column($response['credits']['cast'], 'name'),
+            "isUserWatchlist" => $isUserWatchlist,
         ];
 
 
