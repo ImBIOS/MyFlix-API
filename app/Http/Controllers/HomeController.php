@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ResponseFormatter;
+use App\Models\Watchlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
@@ -25,6 +27,20 @@ class HomeController extends Controller
             'url' => 'https://api.themoviedb.org/3/movie/' . $randomMovieId . '?imamdev&append_to_response=credits',
         ])->json()['data'];
 
+        $isUserWatchlist = false;
+
+        // Check if user already added this movie to watchlist
+        $watchlist = Watchlist::where('user_id', Auth::id())
+            ->where('movie_id', $randomMovieId)
+            ->first();
+
+
+        if ($watchlist) {
+            $isUserWatchlist = true;
+        } else {
+            $isUserWatchlist = false;
+        }
+
 
         $headerData = [
             'id' => $response['id'],
@@ -37,6 +53,9 @@ class HomeController extends Controller
             'director' => Arr::get($response, 'credits.crew.0.name'),
             'trailer_url' => "http://75.101.213.57/movies/" . $dummyTrailers[$pickedKey],
             "video_url" => "http://75.101.213.57/movies/" . $dummyMovies[$pickedKey],
+            "category" => array_column($response['genres'], 'name'),
+            "cast" => array_column($response['credits']['cast'], 'name'),
+            "isUserWatchlist" => $isUserWatchlist,
         ];
 
         $sectionOneResponse = Http::post('https://mtflix-tmdb.vercel.app/api/imamdev', [
@@ -52,6 +71,18 @@ class HomeController extends Controller
             $dummyTrailers = array("sao-trailer.mp4", "ngnl-trailer.mp4");
             $pickedKey = array_rand($dummyMovieIds);
 
+            // Check if user already added this movie to watchlist
+            $watchlist = Watchlist::where('user_id', Auth::id())
+                ->where('movie_id', $item['id'])
+                ->first();
+
+
+            if ($watchlist) {
+                $isUserWatchlist = true;
+            } else {
+                $isUserWatchlist = false;
+            }
+
             return [
                 'id' => $item['id'],
                 'title' => $item['title'],
@@ -62,6 +93,7 @@ class HomeController extends Controller
                 'director' => Arr::get($item, 'credits.crew.0.name'),
                 'trailer_url' => "http://75.101.213.57/movies/" . $dummyTrailers[$pickedKey],
                 "video_url" => "http://75.101.213.57/movies/" . $dummyMovies[$pickedKey],
+                "isUserWatchlist" => $isUserWatchlist,
             ];
         }, $sectionOneResponse['results']);
 
@@ -71,6 +103,18 @@ class HomeController extends Controller
             $dummyTrailers = array("sao-trailer.mp4", "ngnl-trailer.mp4");
             $pickedKey = array_rand($dummyMovieIds);
 
+            // Check if user already added this movie to watchlist
+            $watchlist = Watchlist::where('user_id', Auth::id())
+                ->where('movie_id', $item['id'])
+                ->first();
+
+
+            if ($watchlist) {
+                $isUserWatchlist = true;
+            } else {
+                $isUserWatchlist = false;
+            }
+
             return [
                 'id' => $item['id'],
                 'title' => $item['title'],
@@ -81,6 +125,7 @@ class HomeController extends Controller
                 'director' => Arr::get($item, 'credits.crew.0.name'),
                 'trailer_url' => "http://75.101.213.57/movies/" . $dummyTrailers[$pickedKey],
                 "video_url" => "http://75.101.213.57/movies/" . $dummyMovies[$pickedKey],
+                "isUserWatchlist" => $isUserWatchlist,
             ];
         }, $sectionTwoResponse['results']);
 

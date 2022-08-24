@@ -27,6 +27,9 @@ Route::prefix('v1')->group(function () {
         });
 
         Route::get('movie/{movieId}', [MovieController::class, 'index']);
+        Route::get('movies', [MovieController::class, 'getByGenre']);
+
+        Route::get('homepage', [HomeController::class, 'index']);
 
         Route::post('watchlist', [MovieController::class, 'addWatchlist']);
         Route::get('watchlist', [MovieController::class, 'getWatchlist']);
@@ -42,8 +45,4 @@ Route::prefix('v1')->group(function () {
         Route::post('login', [UserController::class, 'login']);
         Route::post('register', [UserController::class, 'register']);
     });
-
-    Route::get('movies', [MovieController::class, 'getByGenre']);
-
-    Route::get('homepage', [HomeController::class, 'index']);
 });
