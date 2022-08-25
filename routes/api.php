@@ -22,7 +22,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('user')->group(function () {
             Route::get('/', [UserController::class, 'fetch']);
-            Route::put('register', [UserController::class, 'updateProfile']);
+            Route::put('/', [UserController::class, 'updateProfile']);
             Route::post('photo', [UserController::class, 'updatePhoto']);
         });
 
