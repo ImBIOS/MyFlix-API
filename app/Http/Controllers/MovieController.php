@@ -154,6 +154,7 @@ class MovieController extends Controller
                 'director' => Arr::get($response, 'credits.crew.0.name'),
                 'trailer_url' => "http://75.101.213.57/movies/" . $dummyTrailers[$pickedKey],
                 "video_url" => "http://75.101.213.57/movies/" . $dummyMovies[$pickedKey],
+                "isUserWatchlist" => true,
             ];
         }
 
