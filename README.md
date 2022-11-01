@@ -4,12 +4,12 @@ MyFlix (Netflix-like) is a backend for video streaming service that allows users
 
 ## Features
 
--   [x] User authentication
--   [x] Video streaming
--   [x] Video search
--   [] Video queue
--   [] Video reviews
--   [] Video ratings
+- [x] User authentication
+- [x] Video streaming
+- [x] Video search
+- [ ] Video queue
+- [ ] Video reviews
+- [ ] Video ratings
 
 ## How to Run the Laravel
 
