@@ -49,4 +49,6 @@ return [
         'time' => 4,
     ],
 
+    // Jsut to be safw Migrating from Laravel 10 to 11
+    'rehash_on_login' => false,
 ];
